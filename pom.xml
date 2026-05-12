@@ -1,0 +1,13 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.niranjana</groupId>
+    <artifactId>microservices-tax-price-calculation</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+		<module>price-service</module>
+		<module>tax-service</module>
+    </modules>
+</project>

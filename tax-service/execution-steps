@@ -1,0 +1,154 @@
+=>To run this project: right click on project ->Run as Configuration ->select VM argument ->paste -Dspring.profiles.active=local
+then click apply -> Run
+
+http://localhost:4000/api/tax?country=IN
+{
+"service": "Tax-Service",
+"country": "IN",
+"tax": 18,
+"container": "NIRANJAN-LAP"
+}
+
+=>In locally it is running on port 4000..
+=>and also inside docker, this application will run on port 4000 becoz i am exposing 4000 inside Dockerfile..
+
+=================Build Docker Image and run and push to docker hub==========================================================================================
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>mvn clean package -DskipTests
+[INFO] Scanning for projects...
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker build -t niranjana1992/tax-service-image:1.0 .
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker images                                                          
+IMAGE                                                                   ID             DISK USAGE   CONTENT SIZE   EXTRA
+niranjana1992/tax-service-image:1.0                                  644c193ba437        761MB          243MB
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker network create tax-price-calculation-network
+ceac8849dc0fe658d28c8cf1127f87dc77824afd4db4e07b5c480d404308bca5
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker run -d --name tax-service --network tax-price-calculation-network -p 4000:4000 niranjana1992/tax-service-image:1.0
+bfc8213b30645e310b06d787d1cd487b936ecfe7ed5613192dce1c873778c253
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker ps
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+bfc8213b3064   niranjana1992/tax-service-image:1.0   "/__cacert_entrypoin…"   6 seconds ago   Up 5 seconds   0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp   tax-service
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-12T13:42:11.298Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Starting TaxServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/tax-service.jar started by root in /app)
+2026-05-12T13:42:11.300Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-05-12T13:42:12.157Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-05-12T13:42:12.174Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-12T13:42:12.175Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-12T13:42:12.201Z  INFO 1 --- [tax-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-12T13:42:12.202Z  INFO 1 --- [tax-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 850 ms
+2026-05-12T13:42:12.563Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-05-12T13:42:12.588Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Started TaxServiceApplication in 1.823 seconds (process running for 2.434)
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>
+
+To access it in browser::-
+==========================
+http://localhost:4000/api/tax?country=IN
+{
+"service": "Tax-Service",
+"country": "IN",
+"tax": 18,
+"container": "bfc8213b3064"
+}
+
+NOTES:
+======
+=>project name:tax-service
+=>jar file copied inside container: tax-service.jar  (same as project name)
+=>image name: niranjana1992/tax-service-image
+=>container name: tax-service
+=>network name(it helps to communicate betwn two service): tax-price-calculation-network
+=>my spboot project running in locally is 4000 in application.properties file but in Dockerfile i expose it to outside is 4000
+So during mapping i use 4000:4000
+
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker logs bfc8213b3064
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-12T14:16:33.411Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Starting TaxServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/tax-service.jar started by root in /app)
+2026-05-12T14:16:33.414Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-05-12T14:16:34.285Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-05-12T14:16:34.301Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-12T14:16:34.302Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-12T14:16:34.328Z  INFO 1 --- [tax-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-12T14:16:34.329Z  INFO 1 --- [tax-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 861 ms
+2026-05-12T14:16:34.669Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-05-12T14:16:34.694Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Started TaxServiceApplication in 1.838 seconds (process running for 2.437)
+2026-05-12T14:17:15.490Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-12T14:17:15.490Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-12T14:17:15.491Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bfc8213b3064]
+Country id is: IN
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>
+
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker logs bfc8213b3064
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-12T14:16:33.411Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Starting TaxServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/tax-service.jar started by root in /app)
+2026-05-12T14:16:33.414Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-05-12T14:16:34.285Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-05-12T14:16:34.301Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-12T14:16:34.302Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-12T14:16:34.328Z  INFO 1 --- [tax-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-12T14:16:34.329Z  INFO 1 --- [tax-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 861 ms
+2026-05-12T14:16:34.669Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-05-12T14:16:34.694Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Started TaxServiceApplication in 1.838 seconds (process running for 2.437)
+2026-05-12T14:17:15.490Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-12T14:17:15.490Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-12T14:17:15.491Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bfc8213b3064]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bfc8213b3064]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bfc8213b3064]
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>docker push niranjana1992/tax-service-image:1.0
+The push refers to repository [docker.io/niranjana1992/tax-service-image]
+cf5ff1398fac: Pushed
+8089b8b4fff8: Pushed
+1c24335ddd46: Mounted from niranjana1992/spboot-hello-world-docker-image
+3f4245225757: Mounted from niranjana1992/spboot-hello-world-docker-image
+0bfc2aa0ff48: Mounted from niranjana1992/spboot-hello-world-docker-image
+c936cb21e92d: Mounted from niranjana1992/spboot-hello-world-docker-image
+d8afc73467c2: Mounted from niranjana1992/spboot-hello-world-docker-image
+3d45b0db0526: Mounted from niranjana1992/spboot-hello-world-docker-image
+6f5c5aa4e145: Mounted from niranjana1992/spboot-hello-world-docker-image
+1.0: digest: sha256:644c193ba437bfd4021090e652a8fc92dd0b12b0bfbf8346626186f9b5daf2b3 size: 856
+
+C:\EmbarkX\microservices-tax-price-calculation\tax-service>
