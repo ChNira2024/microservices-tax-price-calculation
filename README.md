@@ -16,7 +16,8 @@ This project contains two microservices:
 - 🟦 **Tax Service (4000)** → Returns tax based on country code
 - 🟩 **Price Service (3000)** → Calculates final price using tax service
 - 🟨 **React Frontend (5173)** → UI to interact with backend APIs
-
+**NOTE** ALL THREE SERVICES ARE WORKING IN LOCALLY, INSIDE DOCKER AND ALSO KUBERNETES BUT MANUALLY.
+  
 ### 🔁 Flow
 Client (React UI) → Price Service → Tax Service → Response → UI
 
