@@ -41,7 +41,7 @@ Frontend (React)
 Built using React + Vite
 Runs on port 5173
 Calls backend API using:
-VITE_API_URL=http://localhost:300
+VITE_API_URL=http://localhost:3000
 
 ---
 
