@@ -4,7 +4,7 @@ Check out the below github url for kubernetes deployment for this project:
 
 # 🚀 Microservices Tax Price Calculation System
 
-## 📌 Project Description (350 Characters)
+## 📌 Project Description
 Microservices-based tax and price calculation system built using Spring Boot, Docker, and Kubernetes. Price service calls tax service to calculate total cost dynamically based on country code. Includes containerization, Docker Hub deployment, and Kubernetes orchestration for scalable architecture.
 
 ---
