@@ -15,9 +15,10 @@ This project contains two microservices:
 
 - 🟦 **Tax Service (4000)** → Returns tax based on country code
 - 🟩 **Price Service (3000)** → Calculates final price using tax service
+- 🟨 **React Frontend (5173)** → UI to interact with backend APIs
 
 ### 🔁 Flow
-Client → Price Service → Tax Service → Response
+Client (React UI) → Price Service → Tax Service → Response → UI
 
 ---
 
@@ -34,6 +35,13 @@ GET /api/tax?country=IN
 
 ### Price Service
 GET /api/price?amount=1000&country=IN
+
+### tax-price-calculation-react
+Frontend (React)
+Built using React + Vite
+Runs on port 5173
+Calls backend API using:
+VITE_API_URL=http://localhost:300
 
 ---
 
