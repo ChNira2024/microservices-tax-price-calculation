@@ -1,0 +1,97 @@
+=>Instead of calling 3 services one by one..use docker compose which helps to start all three services at a time.
+=>docker-compose will pull all the 3 image full registry then start..Three services are tax-service,price-srevice,tax-price-calculation-react.
+
+=>Docker will automatically pull all 3 images from DockerHub since they don't exist locally: docker-compose up -d
+=>Then verify,check all 3 containers running: docker ps
+
+# check logs
+docker logs tax-service
+docker logs price-service
+docker logs tax-price-app
+
+Then open browser: http://localhost:5173
+
+=>then stop docker compose : docker-compose down (That's it! It will stop and remove all 3 containers at once.)
+=>If you also want to remove images: docker-compose down --rmi all
+==============================================================================
+PS C:\Niranjana\microservices-tax-price-calculation> ls
+
+    Directory: C:\Niranjana\microservices-tax-price-calculation
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12-05-2026     16:04                .settings
+d-----        15-05-2026     16:55                price-service
+d-----        15-05-2026     12:50                tax-price-calculation-react
+d-----        15-05-2026     15:57                tax-service
+-a----        12-05-2026     16:04            415 .project
+-a----        15-05-2026     15:46            863 docker-compose.yml
+-a----        12-05-2026     17:37            370 pom.xml
+
+
+PS C:\Niranjana\microservices-tax-price-calculation> docker-compose up -d
+time="2026-05-15T17:50:41+05:30" level=warning msg="C:\\Niranjana\\microservices-tax-price-calculation\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[+] up 14/15
+ ✔ Image niranjana1992/price-service-image:1.1                               Pulled                                                                     4.5s
+ ✔ Image niranjana1992/tax-price-calculation-react-image:1.2                 Pulled                                                                     4.5s
+ ✔ Image niranjana1992/tax-service-image:1.1                                 Pulled                                                                     4.5s
+ ✔ Network microservices-tax-price-calculation_tax-price-calculation-network Created                                                                    0.1s
+ ✔ Container tax-service                                                     Created                                                                    0.1s
+ ✔ Container price-service                                                   Created                                                                    0.1s
+ ✔ Container tax-price-app                                                   Created                                                                    0.1s
+PS C:\Niranjana\microservices-tax-price-calculation>
+PS C:\Niranjana\microservices-tax-price-calculation>
+PS C:\Niranjana\microservices-tax-price-calculation> docker ps
+CONTAINER ID   IMAGE                                                 COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+779c230a9c1e   niranjana1992/tax-price-calculation-react-image:1.2   "/docker-entrypoint.…"   3 minutes ago   Up 3 minutes   0.0.0.0:5173->80/tcp, [::]:5173->80/tcp       tax-price-app
+a7ed98dec2bb   niranjana1992/price-service-image:1.1                 "/__cacert_entrypoin…"   3 minutes ago   Up 3 minutes   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   price-service
+f4be402f76e5   niranjana1992/tax-service-image:1.1                   "/__cacert_entrypoin…"   3 minutes ago   Up 3 minutes   0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp   tax-service
+PS C:\Niranjana\microservices-tax-price-calculation> docker logs a7ed98dec2bb
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-15T12:20:47.804Z  INFO 1 --- [price-service] [           main] c.n.price.PriceServiceApplication        : Starting PriceServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/price-service.jar started by root in /app)
+2026-05-15T12:20:47.806Z  INFO 1 --- [price-service] [           main] c.n.price.PriceServiceApplication        : The following 1 profile is active: "docker"
+2026-05-15T12:20:49.247Z  INFO 1 --- [price-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2026-05-15T12:20:49.284Z  INFO 1 --- [price-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T12:20:49.284Z  INFO 1 --- [price-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-15T12:20:49.318Z  INFO 1 --- [price-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T12:20:49.319Z  INFO 1 --- [price-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1423 ms
+CORS frontendUrl: http://localhost:5173
+2026-05-15T12:20:49.774Z  INFO 1 --- [price-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path '/'
+2026-05-15T12:20:49.795Z  INFO 1 --- [price-service] [           main] c.n.price.PriceServiceApplication        : Started PriceServiceApplication in 2.564 seconds (process running for 3.16)
+2026-05-15T12:20:56.131Z  INFO 1 --- [price-service] [nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T12:20:56.131Z  INFO 1 --- [price-service] [nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T12:20:56.132Z  INFO 1 --- [price-service] [nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+API taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=f4be402f76e5]
+taxPercent: 18.0
+price response: PriceResponse [service=Price-Service, amount=1000.0, taxPercent=18.0, taxAmount=180.0, total=1180.0, container=a7ed98dec2bb, taxServiceContainer=f4be402f76e5]
+API taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=f4be402f76e5]
+taxPercent: 18.0
+price response: PriceResponse [service=Price-Service, amount=1200.0, taxPercent=18.0, taxAmount=216.0, total=1416.0, container=a7ed98dec2bb, taxServiceContainer=f4be402f76e5]
+
+
+PS C:\Niranjana\microservices-tax-price-calculation> docker-compose down
+time="2026-05-15T17:55:01+05:30" level=warning msg="C:\\Niranjana\\microservices-tax-price-calculation\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[+] down 4/4
+ ✔ Container tax-price-app                                                   Removed                                                                    0.4s
+ ✔ Container price-service                                                   Removed                                                                    0.4s
+ ✔ Container tax-service                                                     Removed                                                                    0.4s
+ ✔ Network microservices-tax-price-calculation_tax-price-calculation-network Removed
+                                                                     
+PS C:\Niranjana\microservices-tax-price-calculation>docker-compose down --rmi all
+time="2026-05-15T17:55:59+05:30" level=warning msg="C:\\Niranjana\\microservices-tax-price-calculation\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[+] down 3/3
+ ✔ Image niranjana1992/tax-service-image:1.1                 Removed                                                                                    0.0s
+ ✔ Image niranjana1992/price-service-image:1.1               Removed                                                                                    0.1s
+ ✔ Image niranjana1992/tax-price-calculation-react-image:1.2 Removed                                                                                    0.1s
+PS C:\Niranjana\microservices-tax-price-calculation> docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+PS C:\Niranjana\microservices-tax-price-calculation>

@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+  tax-service:
+    image: niranjana1992/tax-service-image:1.1
+    container_name: tax-service
+    ports:
+      - "4000:4000"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - tax-price-calculation-network
+
+  price-service:
+    image: niranjana1992/price-service-image:1.1
+    container_name: price-service
+    ports:
+      - "3000:3000"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - tax-service
+    networks:
+      - tax-price-calculation-network
+
+  frontend:
+    image: niranjana1992/tax-price-calculation-react-image:1.2
+    container_name: tax-price-app
+    ports:
+      - "5173:80"
+    depends_on:
+      - price-service
+    networks:
+      - tax-price-calculation-network
+
+networks:
+  tax-price-calculation-network:
+    driver: bridge

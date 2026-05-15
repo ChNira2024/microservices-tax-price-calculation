@@ -1,0 +1,198 @@
+=>To run this project: right click on project ->Run as Configuration ->select VM argument ->paste -Dspring.profiles.active=local
+then click apply -> Run
+
+http://localhost:4000/api/tax?country=IN
+{
+"service": "Tax-Service",
+"country": "IN",
+"tax": 18,
+"container": "NIRANJAN-LAP"
+}
+
+=>In locally it is running on port 4000..
+=>and also inside docker, this application will run on port 4000 becoz i am exposing 4000 inside Dockerfile..
+
+=================Build Docker Image and run and push to docker hub==========================================================================================
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\niran> cd C:\NIranjana\microservices-tax-price-calculation
+PS C:\NIranjana\microservices-tax-price-calculation>
+PS C:\NIranjana\microservices-tax-price-calculation> ls
+
+    Directory: C:\NIranjana\microservices-tax-price-calculation
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        12-05-2026     16:04                .settings
+d-----        12-05-2026     19:19                price-service
+d-----        15-05-2026     10:57                tax-price-calculation-react
+d-----        15-05-2026     11:06                tax-service
+-a----        12-05-2026     16:04            415 .project
+-a----        12-05-2026     17:37            370 pom.xml
+
+PS C:\NIranjana\microservices-tax-price-calculation> cd tax-service
+PS C:\NIranjana\microservices-tax-price-calculation\tax-service>
+PS C:\NIranjana\microservices-tax-price-calculation\tax-service> mvn clean package -DskipTests
+[INFO] Scanning for projects...
+
+C:\NIranjana\microservices-tax-price-calculation\tax-service>docker build -t niranjana1992/tax-service-image:1.1 .
+
+C:\NIranjana\microservices-tax-price-calculation\tax-service>docker images                                                          
+IMAGE                                                                   ID             DISK USAGE   CONTENT SIZE   EXTRA
+niranjana1992/tax-service-image:1.1                                  4a89afa2f38b        494MB          134MB
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker run -d --name tax-service --network tax-price-calculation-network -p 4000:4000 niranjana1992/tax-service-image:1.1
+bb12bc708de3f045b1ca27cba89c103b3f2a56f5e727170d97d5438de6211859
+
+PS C:\NIranjana\microservices-tax-price-calculation\tax-service>
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker ps
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED              STATUS              PORTS                                         NAMES
+bb12bc708de3   niranjana1992/tax-service-image:1.1   "/__cacert_entrypoin…"   About a minute ago   Up About a minute   0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp   tax-service
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker logs bb12bc708de3
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-15T10:29:27.569Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Starting TaxServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/tax-service.jar started by root in /app)
+2026-05-15T10:29:27.572Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : The following 1 profile is active: "local"
+2026-05-15T10:29:28.372Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-05-15T10:29:28.387Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T10:29:28.387Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-15T10:29:28.414Z  INFO 1 --- [tax-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T10:29:28.415Z  INFO 1 --- [tax-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 799 ms
+2026-05-15T10:29:28.802Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-05-15T10:29:28.821Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Started TaxServiceApplication in 1.725 seconds (process running for 2.276)
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service>
+
+To access it in browser::-
+==========================
+http://localhost:4000/api/tax?country=IN
+{
+"service": "Tax-Service",
+"country": "IN",
+"tax": 18,
+"container": "bb12bc708de3"
+}
+
+NOTES:
+======
+=>project name:tax-service
+=>jar file copied inside container: tax-service.jar  (same as project name)
+=>image name: niranjana1992/tax-service-image:1.1
+=>container name: tax-service
+=>network name(it helps to communicate betwn two service): tax-price-calculation-network
+=>my spboot project running in locally is 4000 in application.properties file but in Dockerfile i expose it to outside is 4000
+So during mapping i use 4000:4000
+
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker logs bb12bc708de3
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-15T10:29:27.569Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Starting TaxServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/tax-service.jar started by root in /app)
+2026-05-15T10:29:27.572Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : The following 1 profile is active: "local"
+2026-05-15T10:29:28.372Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-05-15T10:29:28.387Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T10:29:28.387Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-15T10:29:28.414Z  INFO 1 --- [tax-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T10:29:28.415Z  INFO 1 --- [tax-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 799 ms
+2026-05-15T10:29:28.802Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-05-15T10:29:28.821Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Started TaxServiceApplication in 1.725 seconds (process running for 2.276)
+2026-05-15T10:32:24.721Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T10:32:24.721Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T10:32:24.722Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+
+=>Check logs after price-service hit this service..
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker logs bb12bc708de3
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-05-15T10:29:27.569Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Starting TaxServiceApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/tax-service.jar started by root in /app)
+2026-05-15T10:29:27.572Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : The following 1 profile is active: "local"
+2026-05-15T10:29:28.372Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 4000 (http)
+2026-05-15T10:29:28.387Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T10:29:28.387Z  INFO 1 --- [tax-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-05-15T10:29:28.414Z  INFO 1 --- [tax-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T10:29:28.415Z  INFO 1 --- [tax-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 799 ms
+2026-05-15T10:29:28.802Z  INFO 1 --- [tax-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 4000 (http) with context path '/'
+2026-05-15T10:29:28.821Z  INFO 1 --- [tax-service] [           main] c.niranjana.tax.TaxServiceApplication    : Started TaxServiceApplication in 1.725 seconds (process running for 2.276)
+2026-05-15T10:32:24.721Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T10:32:24.721Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T10:32:24.722Z  INFO 1 --- [tax-service] [nio-4000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: US
+taxResponse: TaxResponse [service=Tax-Service, country=US, tax=8, container=bb12bc708de3]
+Country id is: IN
+taxResponse: TaxResponse [service=Tax-Service, country=IN, tax=18, container=bb12bc708de3]
+Country id is: US
+taxResponse: TaxResponse [service=Tax-Service, country=US, tax=8, container=bb12bc708de3]
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service>
+
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker push niranjana1992/tax-service-image:1.1
+The push refers to repository [docker.io/niranjana1992/tax-service-image]
+86e99ed2d4ab: Pushed
+44a68e9d5566: Pushed
+993d8fd138c9: Pushed
+a1ec5cc057cf: Pushed
+6f5c5aa4e145: Mounted from niranjana1992/spboot-hello-world-docker-image
+139f014ce8b0: Pushed
+d8d245b274e0: Pushed
+1c24335ddd46: Mounted from niranjana1992/spboot-hello-world-docker-image
+74e368405305: Pushed
+1.1: digest: sha256:4a89afa2f38ba7701a270e11d0f67fd751bbff3ffa029adfabae15e9d42d022b size: 856
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service>
+
+=>After push, stop container the remove it...and also remove image ...
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker stop tax-service
+tax-service
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service>
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service> docker rm tax-service
+tax-service
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service>
+S C:\Niranjana\microservices-tax-price-calculation\tax-service> docker rmi niranjana1992/tax-service-image:1.1
+Untagged: niranjana1992/tax-service-image:1.1
+Deleted: sha256:4a89afa2f38ba7701a270e11d0f67fd751bbff3ffa029adfabae15e9d42d022b
+PS C:\Niranjana\microservices-tax-price-calculation\tax-service>
+
+docker ps -a      # no containers
+docker images     # no images
