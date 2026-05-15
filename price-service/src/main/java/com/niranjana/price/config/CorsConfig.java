@@ -24,7 +24,9 @@ public class CorsConfig {
 	        @Override
 	        public void addCorsMappings(CorsRegistry registry) {
 	            List<String> origins = new ArrayList<>();
+	            
 	            origins.add(frontendUrl);
+	            System.out.println("Origin: "+ origins);
 	            if (frontendUrlK8s != null) {
 	                origins.add(frontendUrlK8s);
 	            }

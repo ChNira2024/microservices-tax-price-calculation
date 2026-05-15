@@ -84,7 +84,7 @@ http://localhost:3000/api/price?amount=1000&country=IN
 "container": "99500697423b",
 "taxServiceContainer": "bb12bc708de3"
 }
-
+Note: Check in Network tab->request->request response->it must Access-Control-Allow-Origin : http://localhost:5173
 
 NOTES:
 ======
@@ -159,3 +159,23 @@ PS C:\Niranjana\microservices-tax-price-calculation\price-service>
 
 docker ps -a      # no containers
 docker images     # no images
+
+=>if any modification happend in backend then ..follow below steps 
+*************************************************************************PS C:\EmbarkX\microservices-tax-price-calculation\price-service> docker ps
+CONTAINER ID   IMAGE                                                 COMMAND                  CREATED             STATUS             PORTS                                         NAMES
+7a8f709575e4   niranjana1992/price-service-image:1.2                 "/__cacert_entrypoin…"   51 seconds ago      Up 50 seconds      0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   price-service
+35791b52709b   niranjana1992/tax-price-calculation-react-image:1.2   "/docker-entrypoint.…"   56 minutes ago      Up 56 minutes      0.0.0.0:5173->80/tcp, [::]:5173->80/tcp       tax-price-app
+688f5d82c4cf   niranjana1992/tax-service-image:1.1                   "/__cacert_entrypoin…"   About an hour ago   Up About an hour   0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp   tax-service
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service> docker logs 7a8f709575e4
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service> docker stop price-service
+price-service
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service>
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service>
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service> docker rm price-service
+price-service
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service> mvn clean package -DskipTests
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service> docker build -t niranjana1992/price-service-image:1.2 .
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service> docker run -d --name price-service --network tax-price-calculation-network -p 3000:3000 -e SPRING_PROFILES_ACTIVE=docker niranjana1992/price-service-image:1.2
+7a8f709575e400098197bd0788629bfb72a4b64816786ba1e0b9b7053b6c1677
+PS C:\EmbarkX\microservices-tax-price-calculation\price-service>
+
